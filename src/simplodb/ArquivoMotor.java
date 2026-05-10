@@ -3,6 +3,8 @@ package simplodb;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Motor de persistência do SimploDB.
@@ -71,7 +73,7 @@ public class ArquivoMotor {
      * Desserializa e retorna o objeto do arquivo correspondente.
      * Retorna Optional.empty() se o arquivo não existir.
      *
-     * Passos:
+     * 
      *   1. Resolva o caminho do arquivo com resolverCaminho(entidade, id)
      *   2. Se Files.notExists(caminho), retorne Optional.empty()
      *   3. Abra um InputStream com Files.newInputStream(caminho)
@@ -115,14 +117,31 @@ public class ArquivoMotor {
      */
     @SuppressWarnings("unchecked")
     public <T> List<T> carregarTodos(String entidade) throws IOException, ClassNotFoundException {
-        // TODO Exercício 4
-        throw new UnsupportedOperationException("Não implementado — veja TODO Exercício 4");
+        Path dir = diretorioBase.resolve(entidade);
+
+        if (Files.notExists(dir)) {
+            return List.of();
+        }
+
+        try (Stream<Path> arquivos = Files.list(dir)) {
+            return arquivos
+                    .map(path -> Long.parseLong(path.getFileName().toString().replace(".dat", "")))
+                    .map(id -> {
+                        try {
+                            return carregar(entidade, id);
+                        } catch (IOException | ClassNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
+                    })
+                    .filter(Optional::isPresent)
+                    .map(opt -> (T) opt.get())
+                    .collect(Collectors.toList());
+        }
     }
 
     // -------------------------------------------------------------------------
     // Fornecido — deletar arquivo
     // -------------------------------------------------------------------------
-
     public boolean deletar(String entidade, Long id) throws IOException {
         Path caminho = resolverCaminho(entidade, id);
         return Files.deleteIfExists(caminho);

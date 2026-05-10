@@ -1,4 +1,5 @@
 package simplodb;
+import java.util.stream.Collectors;
 
 import java.io.IOException;
 import java.util.List;
@@ -140,6 +141,13 @@ public abstract class Repositorio<T extends Persistivel> {
      */
     public List<T> buscarComFiltro(Predicate<T> filtro) {
         // TODO Exercício 2
-        throw new UnsupportedOperationException("Não implementado — veja TODO Exercício 2");
+        Collectors collectors;
+        return buscarTodos()
+                .stream()
+                .filter(filtro)
+                .collect(Collectors.toList());
     }
 }
+      
+        
+
