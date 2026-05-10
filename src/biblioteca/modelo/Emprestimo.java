@@ -66,10 +66,6 @@ public class Emprestimo implements Persistivel {
         return this.dataDevolvido == null &&  LocalDateTime.now().isAfter(this.dataDevolucaoPrevista);
     }
 
-    // -------------------------------------------------------------------------
-    // TODO Exercício 1b — Datas (Módulo 1)
-    // -------------------------------------------------------------------------
-
     /**
      * Calcula a multa acumulada em reais (R$ 1,00 por dia de atraso).
      *
@@ -88,8 +84,17 @@ public class Emprestimo implements Persistivel {
      *   4. Retorne MULTA_POR_DIA.multiply(BigDecimal.valueOf(dias))
      */
     public BigDecimal calcularMulta() {
-        // TODO Exercício 1b
-        throw new UnsupportedOperationException("Não implementado — veja TODO Exercício 1b");
+        if (!estaAtrasado()) {
+            return BigDecimal.ZERO;
+        }
+
+        LocalDateTime referencia = LocalDateTime.now();
+        if (isDevolvido()){
+            referencia = this.dataDevolvido;
+        }
+
+        long dias = ChronoUnit.DAYS.between(dataDevolucaoPrevista, referencia);
+        return MULTA_POR_DIA.multiply(BigDecimal.valueOf(dias));
     }
 
     // -------------------------------------------------------------------------
