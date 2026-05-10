@@ -53,10 +53,6 @@ public class Emprestimo implements Persistivel {
         return dataDevolvido != null;
     }
 
-    // -------------------------------------------------------------------------
-    // TODO Exercício 1a — Datas (Módulo 1)
-    // -------------------------------------------------------------------------
-
     /**
      * Retorna true se o empréstimo está atrasado.
      *
@@ -67,8 +63,7 @@ public class Emprestimo implements Persistivel {
      * Dica: use LocalDateTime.now() e o método isAfter()
      */
     public boolean estaAtrasado() {
-        // TODO Exercício 1a
-        throw new UnsupportedOperationException("Não implementado — veja TODO Exercício 1a");
+        return this.dataDevolvido == null &&  LocalDateTime.now().isAfter(this.dataDevolucaoPrevista);
     }
 
     // -------------------------------------------------------------------------
