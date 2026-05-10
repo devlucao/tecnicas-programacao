@@ -4,6 +4,7 @@ import simplodb.Persistivel;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 public class Emprestimo implements Persistivel {
@@ -53,10 +54,6 @@ public class Emprestimo implements Persistivel {
         return dataDevolvido != null;
     }
 
-    // -------------------------------------------------------------------------
-    // TODO Exercício 1a — Datas (Módulo 1)
-    // -------------------------------------------------------------------------
-
     /**
      * Retorna true se o empréstimo está atrasado.
      *
@@ -67,13 +64,8 @@ public class Emprestimo implements Persistivel {
      * Dica: use LocalDateTime.now() e o método isAfter()
      */
     public boolean estaAtrasado() {
-        // TODO Exercício 1a
-        throw new UnsupportedOperationException("Não implementado — veja TODO Exercício 1a");
+        return this.dataDevolvido == null &&  LocalDateTime.now().isAfter(this.dataDevolucaoPrevista);
     }
-
-    // -------------------------------------------------------------------------
-    // TODO Exercício 1b — Datas (Módulo 1)
-    // -------------------------------------------------------------------------
 
     /**
      * Calcula a multa acumulada em reais (R$ 1,00 por dia de atraso).
@@ -93,13 +85,18 @@ public class Emprestimo implements Persistivel {
      *   4. Retorne MULTA_POR_DIA.multiply(BigDecimal.valueOf(dias))
      */
     public BigDecimal calcularMulta() {
-        // TODO Exercício 1b
-        throw new UnsupportedOperationException("Não implementado — veja TODO Exercício 1b");
-    }
+        if (!estaAtrasado()) {
+            return BigDecimal.ZERO;
+        }
 
-    // -------------------------------------------------------------------------
-    // TODO Exercício 1c — Datas (Módulo 1)
-    // -------------------------------------------------------------------------
+        LocalDateTime referencia = LocalDateTime.now();
+        if (isDevolvido()){
+            referencia = this.dataDevolvido;
+        }
+
+        long dias = ChronoUnit.DAYS.between(dataDevolucaoPrevista, referencia);
+        return MULTA_POR_DIA.multiply(BigDecimal.valueOf(dias));
+    }
 
     /**
      * Formata um resumo legível do empréstimo.
@@ -123,7 +120,22 @@ public class Emprestimo implements Persistivel {
      */
     @Override
     public String toString() {
-        // TODO Exercício 1c
-        throw new UnsupportedOperationException("Não implementado — veja TODO Exercício 1c");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+        String dataDevolucaoFormatado = dataDevolucaoPrevista.format(formatter);
+
+        String resumo = "Empréstimo #" + id +
+                " | Livro: " + livroId +
+                " | Usuário: " + usuarioId +
+                " | Vence: " + dataDevolucaoFormatado;
+
+        if (isDevolvido()) {
+            resumo += " | Devolvido: " + dataDevolvido.format(formatter);
+        }
+
+        if (estaAtrasado()) {
+            resumo += " | ATRASADO | Multa: R$ " + String.format("%.2f", calcularMulta());
+        }
+        return resumo;
     }
 }
