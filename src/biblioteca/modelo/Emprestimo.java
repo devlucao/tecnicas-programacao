@@ -4,6 +4,7 @@ import simplodb.Persistivel;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 public class Emprestimo implements Persistivel {
@@ -97,10 +98,6 @@ public class Emprestimo implements Persistivel {
         return MULTA_POR_DIA.multiply(BigDecimal.valueOf(dias));
     }
 
-    // -------------------------------------------------------------------------
-    // TODO Exercício 1c — Datas (Módulo 1)
-    // -------------------------------------------------------------------------
-
     /**
      * Formata um resumo legível do empréstimo.
      *
@@ -123,7 +120,22 @@ public class Emprestimo implements Persistivel {
      */
     @Override
     public String toString() {
-        // TODO Exercício 1c
-        throw new UnsupportedOperationException("Não implementado — veja TODO Exercício 1c");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+        String dataDevolucaoFormatado = dataDevolucaoPrevista.format(formatter);
+
+        String resumo = "Empréstimo #" + id +
+                " | Livro: " + livroId +
+                " | Usuário: " + usuarioId +
+                " | Vence: " + dataDevolucaoFormatado;
+
+        if (isDevolvido()) {
+            resumo += " | Devolvido: " + dataDevolvido.format(formatter);
+        }
+
+        if (estaAtrasado()) {
+            resumo += " | ATRASADO | Multa: R$ " + String.format("%.2f", calcularMulta());
+        }
+        return resumo;
     }
 }
