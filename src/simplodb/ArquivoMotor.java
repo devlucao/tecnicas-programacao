@@ -73,7 +73,7 @@ public class ArquivoMotor {
      * Desserializa e retorna o objeto do arquivo correspondente.
      * Retorna Optional.empty() se o arquivo não existir.
      *
-
+     * 
      *   1. Resolva o caminho do arquivo com resolverCaminho(entidade, id)
      *   2. Se Files.notExists(caminho), retorne Optional.empty()
      *   3. Abra um InputStream com Files.newInputStream(caminho)
