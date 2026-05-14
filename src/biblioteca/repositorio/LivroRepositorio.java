@@ -31,19 +31,21 @@ public class LivroRepositorio extends Repositorio<Livro> {
 
     /**
      * Retorna todos os livros de um gênero, ordenados do mais recente para o mais antigo.
-     *
+     * <p>
      * Passos:
-     *   1. buscarTodos().stream()
-     *   2. .filter(l -> l.getGenero().equalsIgnoreCase(genero))
-     *   3. .sorted(Comparator.comparingInt(Livro::getAnoPublicacao).reversed())
-     *   4. .collect(Collectors.toList())
+     * 1. buscarTodos().stream()
+     * 2. .filter(l -> l.getGenero().equalsIgnoreCase(genero))
+     * 3. .sorted(Comparator.comparingInt(Livro::getAnoPublicacao).reversed())
+     * 4. .collect(Collectors.toList())
      *
      * @param genero gênero a filtrar (case-insensitive)
      * @return lista ordenada por anoPublicacao descendente
      */
     public List<Livro> buscarPorGeneroCoordenado(String genero) {
-        // TODO Exercício 3a
-        throw new UnsupportedOperationException("Não implementado — veja TODO Exercício 3a");
+        return buscarTodos().stream()
+            .filter(livro -> livro.getGenero().equalsIgnoreCase(genero))
+            .sorted(Comparator.comparingInt(Livro::getAnoPublicacao).reversed())
+            .collect(Collectors.toList());
     }
 
     // -------------------------------------------------------------------------
@@ -60,7 +62,7 @@ public class LivroRepositorio extends Repositorio<Livro> {
      * @return Map onde a chave é o gênero e o valor é a lista de livros daquele gênero
      */
     public Map<String, List<Livro>> agruparPorGenero() {
-        // TODO Exercício 3b
-        throw new UnsupportedOperationException("Não implementado — veja TODO Exercício 3b");
+        return buscarTodos().stream()
+            .collect(Collectors.groupingBy(Livro::getGenero));
     }
 }

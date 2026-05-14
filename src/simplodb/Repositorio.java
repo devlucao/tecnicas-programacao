@@ -44,7 +44,7 @@ public abstract class Repositorio<T extends Persistivel> {
     // Fornecido — salvar
     // -------------------------------------------------------------------------
 
-    /**
+   /**
      * Persiste a entidade. Se não tiver ID, atribui o próximo disponível.
      *
      * @param objeto entidade a salvar
