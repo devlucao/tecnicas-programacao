@@ -47,7 +47,6 @@ public class LivroRepositorio extends Repositorio<Livro> {
             .sorted(Comparator.comparingInt(Livro::getAnoPublicacao).reversed())
             .collect(Collectors.toList());
     }
-
     // -------------------------------------------------------------------------
     // TODO Exercício 3b — Streams (Módulo 3)
     // -------------------------------------------------------------------------
