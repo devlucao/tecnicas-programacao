@@ -36,5 +36,4 @@ bin/
 db/
 
 ### Geração de PDF
-*.pdf
 node_modules/
